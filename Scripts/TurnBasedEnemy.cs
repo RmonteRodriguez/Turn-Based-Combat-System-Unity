@@ -46,6 +46,10 @@ public class TurnBasedEnemy : MonoBehaviour
 
     public void HealSelf()
     {
+        if (turnBasedCombatManager.playersTurn == true) return;
 
+        health = health + healAmount;
+
+        turnBasedCombatManager.playersTurn = true;
     }
 }
