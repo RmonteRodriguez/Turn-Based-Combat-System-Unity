@@ -1,3 +1,4 @@
+//Code written by Remote Dev
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -37,51 +38,69 @@ public class TurnBasedPlayer : MonoBehaviour
         UpdateHealth();
     }
 
+    //This function is used when the player attacks
     public void Attack()
     {
         if (turnBasedCombatManager.playersTurn == false) return;
 
-        int t_critChance = Random.Range(0, 10);
-
-        if (t_critChance > 8)
+        if (turnBasedCombatManager.timer < 0)
         {
-            turnBasedEnemy.health = turnBasedEnemy.health - (damageAmount * 2);
+            int t_critChance = Random.Range(0, 10);
 
-            dialogueBoxText.text = "YOU STRIKE YOUR ENEMY LEAVING THEM WITH " + turnBasedEnemy.health + " HP.";
+            //This if statement checks to see if the player has a good enough number for a crit
+            if (t_critChance > 8) 
+            {
+                turnBasedEnemy.health = turnBasedEnemy.health - (damageAmount * 2);
+
+                dialogueBoxText.text = "YOU STRIKE YOUR ENEMY LEAVING THEM WITH " + turnBasedEnemy.health + " HP.";
+            }
+            else
+            {
+                turnBasedEnemy.health = turnBasedEnemy.health - damageAmount;
+
+                dialogueBoxText.text = "YOU STRIKE YOUR ENEMY LEAVING THEM WITH " + turnBasedEnemy.health + " HP.";
+            }
+
+            turnBasedCombatManager.playersTurn = false;
+            turnBasedCombatManager.timer = 2;
         }
         else
         {
-            turnBasedEnemy.health = turnBasedEnemy.health - damageAmount;
-
-            dialogueBoxText.text = "YOU STRIKE YOUR ENEMY LEAVING THEM WITH " + turnBasedEnemy.health + " HP.";
+            dialogueBoxText.text = "YOU CANNOT ATTACK AT THIS TIME";
         }
-
-        turnBasedCombatManager.playersTurn = false;
     }
 
+    //This function is used when the player heals
     public void Heal()
     {
         if (turnBasedCombatManager.playersTurn == false) return;
 
-        if (health < 100)
+        if (turnBasedCombatManager.timer >= 0 && health < 100)
         {
-
             health = health + healAmount;
 
             turnBasedCombatManager.playersTurn = false;
+            turnBasedCombatManager.timer = 2;
+        }
+        else
+        {
+            dialogueBoxText.text = "YOU CANNOT HEAL AT THIS TIME";
         }
     }
 
+    //This function is used when the player switches
     public void Switch()
     {
         dialogueBoxText.text = "CANNOT SWITCH AT THIS TIME...";
     }
 
+    //This function is used when the player opens bag
     public void Bag()
     {
         dialogueBoxText.text = "YOU HAVE NO ITEMS IN YOUR BAG...";
     }
 
+    //This function is responsable for making sure the health UI is up to date on the screen
     public void UpdateHealth()
     {
         currentHealthText.text = health + "";

@@ -1,27 +1,36 @@
+//Code written by Remote Dev
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class TurnBasedCombatManager : MonoBehaviour
 {
-    public GameObject player;
-    public GameObject enemy;
+    public TurnBasedPlayer turnBasedPlayer;
+    public TurnBasedEnemy turnBasedEnemy;
 
-    public int turnNumber;
+    public float timer;
 
-    public bool enemysTurn;
     public bool playersTurn;
 
     // Start is called before the first frame update
     void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player");
-        enemy = GameObject.FindGameObjectWithTag("Enemy");
+        turnBasedEnemy = GameObject.Find("Enemy").GetComponent<TurnBasedEnemy>();
+        turnBasedPlayer = GameObject.Find("Player").GetComponent<TurnBasedPlayer>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (turnBasedEnemy.health <= 0 || turnBasedPlayer.health <= 0)
+        {
+            SceneManager.LoadScene(0);
+        }
+
+        if (timer > 0)
+        {
+            timer -= Time.deltaTime;
+        }
     }
 }

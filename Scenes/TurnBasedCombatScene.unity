@@ -245,7 +245,8 @@ MonoBehaviour:
   turnBasedPlayer: {fileID: 0}
   health: 0
   damageAmount: 5
-  healAmount: 0
+  healAmount: 5
+  dialogueBoxText: {fileID: 147307483}
 --- !u!1 &102919527
 GameObject:
   m_ObjectHideFlags: 0
@@ -1568,10 +1569,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d9cea53eb43e4244bd4a99b9bcd98c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
-  enemy: {fileID: 0}
-  turnNumber: 0
-  enemysTurn: 0
+  turnBasedPlayer: {fileID: 164162628}
+  turnBasedEnemy: {fileID: 0}
+  timer: 2
   playersTurn: 1
 --- !u!4 &1079040223
 Transform:

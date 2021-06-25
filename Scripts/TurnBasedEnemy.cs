@@ -1,6 +1,8 @@
+//Code written by Remote Dev
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TurnBasedEnemy : MonoBehaviour
 {
@@ -10,6 +12,9 @@ public class TurnBasedEnemy : MonoBehaviour
     public int health;
     public int damageAmount;
     public int healAmount;
+
+    //UI
+    public Text dialogueBoxText;
 
     // Start is called before the first frame update
     void Start()
@@ -23,13 +28,15 @@ public class TurnBasedEnemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        AttackPlayer();
+        if (turnBasedCombatManager.timer < 0)
+        {
+            EnemyTurn();
+        }
     }
 
+    //This function is called when the enemy attacks
     public void AttackPlayer()
     {
-        if (turnBasedCombatManager.playersTurn == true) return;
-
         int t_critChance = Random.Range(0, 10);
 
         if (t_critChance > 8)
@@ -41,15 +48,34 @@ public class TurnBasedEnemy : MonoBehaviour
             turnBasedPlayer.health = turnBasedPlayer.health - damageAmount;
         }
 
-        turnBasedCombatManager.playersTurn = true;
+        dialogueBoxText.text = "THE ENEMY ATTACKS BACK WITH ALL THE STRENGTH IS HAS";
     }
 
+    //This function heals the enemy
     public void HealSelf()
+    {
+        health = health + healAmount;
+
+        dialogueBoxText.text = "THE ENEMY HEALED THEMSELVES BRINGING THEIR HEALTH TO " + health;
+    }
+
+    //The enemy turn function will randomly generate a number and if that number is above 8 and the enemy's health is lower than 100 they will heal otherwise they will just attack
+    public void EnemyTurn()
     {
         if (turnBasedCombatManager.playersTurn == true) return;
 
-        health = health + healAmount;
+        int t_healChance = Random.Range(0, 10);
+
+        if (t_healChance > 8 && health < 100)
+        {
+            HealSelf();
+        }
+        else
+        {
+            AttackPlayer();
+        }
 
         turnBasedCombatManager.playersTurn = true;
+        turnBasedCombatManager.timer = 2;
     }
 }
